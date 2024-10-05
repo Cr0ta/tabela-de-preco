@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabela de Preços para Cliente Final</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 5px;
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: right;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            text-transform: uppercase;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tabela de Preços para Cliente Final</h1>
+    <label for="custo">Custo do produto:</label>
+    <input type="number" id="custo" step="0.01" min="0">
+    
+    <label for="markup">Markup desejado (%):</label>
+    <input type="number" id="markup" step="0.1" min="0">
+    
+    <button onclick="calcularTabelaPrecos()">Gerar Tabela de Preços</button>
+    
+    <table id="tabelaPrecos">
+        <thead>
+            <tr>
+                <th>Markup (%)</th>
+                <th>Preço de Venda (R$)</th>
+                <th>Lucro (R$)</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        function calcularTabelaPrecos() {
+            const custo = parseFloat(document.getElementById('custo').value);
+            const markupDesejado = parseFloat(document.getElementById('markup').value);
+            
+            if (isNaN(custo) || isNaN(markupDesejado) || custo <= 0 || markupDesejado < 0) {
+                alert('Por favor, insira valores válidos. O custo deve ser maior que zero e o markup não pode ser negativo.');
+                return;
+            }
+            
+            const tbody = document.querySelector('#tabelaPrecos tbody');
+            tbody.innerHTML = '';
+            
+            for (let i = 0; i <= markupDesejado; i += 5) {
+                const precoVenda = custo * (1 + i / 100);
+                const lucro = precoVenda - custo;
+                
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = i.toFixed(1) + '%';
+                row.insertCell(1).textContent = 'R$ ' + precoVenda.toFixed(2);
+                row.insertCell(2).textContent = 'R$ ' + lucro.toFixed(2);
+            }
+        }
+    </script>
+</body>
+</html>

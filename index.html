@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Markup do Pedro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 5px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Markup do Pedro</h1>
+    <label for="custo">Custo do produto:</label>
+    <input type="number" id="custo" step="0.01" min="0">
+    
+    <label for="venda">Preço de venda:</label>
+    <input type="number" id="venda" step="0.01" min="0">
+    
+    <button onclick="calcularMarkup()">Calcular Markup</button>
+    
+    <p id="resultado"></p>
+
+    <script>
+        function calcularMarkup() {
+            const custo = parseFloat(document.getElementById('custo').value);
+            const venda = parseFloat(document.getElementById('venda').value);
+            
+            if (isNaN(custo) || isNaN(venda) || custo <= 0 || venda <= 0) {
+                document.getElementById('resultado').textContent = 'Por favor, insira valores válidos maiores que zero.';
+                return;
+            }
+            
+            const markup = ((venda - custo) / custo) * 100;
+            document.getElementById('resultado').textContent = `O markup é de ${markup.toFixed(2)}%`;
+        }
+    </script>
+</body>
+</html>

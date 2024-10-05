@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Preço Final com Impostos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 5px;
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculadora de Preço Final com Impostos</h1>
+    <label for="custoProduto">Custo do produto (R$):</label>
+    <input type="number" id="custoProduto" step="0.01" min="0">
+    
+    <label for="margemLucro">Margem de lucro (%):</label>
+    <input type="number" id="margemLucro" step="0.1" min="0">
+    
+    <label for="icms">ICMS (%):</label>
+    <input type="number" id="icms" value="18" step="0.1" min="0" max="100">
+    
+    <label for="pis">PIS (%):</label>
+    <input type="number" id="pis" value="1.65" step="0.01" min="0" max="100">
+    
+    <label for="cofins">COFINS (%):</label>
+    <input type="number" id="cofins" value="7.6" step="0.01" min="0" max="100">
+    
+    <label for="ipi">IPI (%):</label>
+    <input type="number" id="ipi" value="10" step="0.1" min="0" max="100">
+    
+    <button onclick="calcularPrecoFinal()">Calcular Preço Final</button>
+    
+    <table id="resultadoTabela">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Valor (R$)</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        function calcularPrecoFinal() {
+            const custoProduto = parseFloat(document.getElementById('custoProduto').value);
+            const margemLucro = parseFloat(document.getElementById('margemLucro').value) / 100;
+            const icms = parseFloat(document.getElementById('icms').value) / 100;
+            const pis = parseFloat(document.getElementById('pis').value) / 100;
+            const cofins = parseFloat(document.getElementById('cofins').value) / 100;
+            const ipi = parseFloat(document.getElementById('ipi').value) / 100;
+            
+            if (isNaN(custoProduto) || custoProduto <= 0 || isNaN(margemLucro) || margemLucro < 0) {
+                alert('Por favor, insira valores válidos para o custo do produto e margem de lucro.');
+                return;
+            }
+            
+            const lucro = custoProduto * margemLucro;
+            const baseCalculo = custoProduto + lucro;
+            const valorICMS = baseCalculo * icms / (1 - icms);
+            const valorPIS = baseCalculo * pis / (1 - pis);
+            const valorCOFINS = baseCalculo * cofins / (1 - cofins);
+            const valorIPI = baseCalculo * ipi;
+            
+            const precoFinal = baseCalculo + valorICMS + valorPIS + valorCOFINS + valorIPI;
+            
+            const tbody = document.querySelector('#resultadoTabela tbody');
+            tbody.innerHTML = '';
+            
+            adicionarLinha('Custo do Produto', custoProduto);
+            adicionarLinha('Lucro', lucro);
+            adicionarLinha('ICMS', valorICMS);
+            adicionarLinha('PIS', valorPIS);
+            adicionarLinha('COFINS', valorCOFINS);
+            adicionarLinha('IPI', valorIPI);
+            adicionarLinha('Preço Final', precoFinal);
+        }
+        
+        function adicionarLinha(item, valor) {
+            const tbody = document.querySelector('#resultadoTabela tbody');
+            const row = tbody.insertRow();
+            row.insertCell(0).textContent = item;
+            row.insertCell(1).textContent = 'R$ ' + valor.toFixed(2);
+        }
+    </script>
+</body>
+</html>
